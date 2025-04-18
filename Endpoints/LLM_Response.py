@@ -3,7 +3,7 @@ import requests
 from pydantic import BaseModel, Field
 from typing import Optional
 from Constants.constants import Constant
-from Constants.prompts import SYSTEM_PROMPT, USER_PROMPT, SYSTEM_PROMPT_VOUCHER66, USER_PROMPT_VOUCHER, SYSTEM_PROMPT_VOUCHER_INSTALLMENT
+from Constants.prompts import SYSTEM_PROMPT, USER_PROMPT, SYSTEM_PROMPT_PRO_SYSTEMS, USER_PROMPT_TRANSMITTAL, SYSTEM_PROMPT_VOUCHER_INSTALLMENT
 from dotenv import load_dotenv
 import os
 
@@ -20,9 +20,16 @@ def read_markdown(md_path: str) -> str:
         return file.read()
 
 
-def get_llm_response(text: str, DocumentDataWithSchema: dict) -> dict:
+def get_llm_response(text: str,formType:str, DocumentDataWithSchema: dict) -> dict:
     
     api_key = API_KEY 
+    if(formType == "Transmittal"):
+        S_PROMPT = SYSTEM_PROMPT_PRO_SYSTEMS
+        U_PROMPT = USER_PROMPT_TRANSMITTAL
+    else:
+        S_PROMPT = SYSTEM_PROMPT
+        U_PROMPT = USER_PROMPT
+        
     headers = {
         "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json"
@@ -30,8 +37,8 @@ def get_llm_response(text: str, DocumentDataWithSchema: dict) -> dict:
     payload = {
         "model": Constant.GPTModel.Name,
         "messages": [
-            {"role": "system", "content": SYSTEM_PROMPT_VOUCHER_INSTALLMENT},
-            {"role": "user", "content": USER_PROMPT_VOUCHER + f": {text}\n"}
+            {"role": "system", "content": S_PROMPT},
+            {"role": "user", "content": U_PROMPT + f": {text}\n"}
         ],
         "functions": [
             {

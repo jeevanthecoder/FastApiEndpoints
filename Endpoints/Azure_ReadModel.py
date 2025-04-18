@@ -12,6 +12,7 @@ AZURE_API_KEY = os.getenv("AZURE_API_KEY")
 
 # Initialize the Azure Document Analysis Client
 document_analysis_client = DocumentAnalysisClient(AZURE_ENDPOINT, AzureKeyCredential(AZURE_API_KEY))
+print("Endpoint:", repr(os.getenv("AZURE_ENDPOINT")))
 
 # source_pdf_path = "./pdfs/f1099div_filled-flat.pdf"
 

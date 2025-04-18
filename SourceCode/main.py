@@ -82,7 +82,8 @@ async def get_pydantic_response(form_name: str,request: Request):
     else:
         return {"error": "Invalid form name"}
     
-    response = LLM_Response.get_llm_response(text, DocumentDataWithSchema)
+    response = LLM_Response.get_llm_response(text,form_name, DocumentDataWithSchema)
+    print("Response: ",response)
     arguments_str = response["choices"][0]["message"]["function_call"]["arguments"]
 
     arguments_dict = json.loads(arguments_str)
